@@ -1,0 +1,420 @@
+-- Generation Time: Jun 09, 2007 at 02:38 PM
+-- MySQL : 5.0.27
+-- PHP : 5.1.6
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+-- 
+-- Database: 'phprt'
+-- 
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_accesstimes'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_accesstimes;
+CREATE TABLE PHP_RT_accesstimes (
+  access_id int(20) NOT NULL auto_increment,
+  user_id int(11) NOT NULL default '0',
+  login int(11) default NULL,
+  logout int(11) default NULL,
+  PRIMARY KEY  (access_id),
+  UNIQUE KEY access_id (access_id),
+  KEY user_id (user_id)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1165 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_attachments'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_attachments;
+CREATE TABLE PHP_RT_attachments (
+  attach_id int(11) NOT NULL auto_increment,
+  ticket_id int(11) NOT NULL default '0',
+  attach_type varchar(16) NOT NULL default '',
+  attach_name varchar(40) NOT NULL default '',
+  attach_size int(11) NOT NULL default '0',
+  `data` mediumblob NOT NULL,
+  UNIQUE KEY attach_id (attach_id),
+  KEY ticket_id (ticket_id)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_db_info'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_db_info;
+CREATE TABLE PHP_RT_db_info (
+  db_index int(11) NOT NULL auto_increment,
+  version_num varchar(64) default NULL,
+  mail_tag varchar(64) default NULL,
+  pswd_exp_time int(11) default NULL,
+  pswd_alpha tinyint(1) default NULL,
+  emails_show_up tinyint(1) default NULL,
+  itar_flag tinyint(1) default NULL,
+  restricted_label varchar(40) default NULL,
+  restricted_admin_notice tinytext,
+  restricted tinytext,
+  not_restricted tinytext,
+  switch_warning tinytext,
+  entering_warning tinytext,
+  data_entry_banner varchar(64) default NULL,
+  allow_attachments tinyint(1) default '0',
+  PRIMARY KEY  (db_index),
+  UNIQUE KEY version_num (version_num)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_each_ticket'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_each_ticket;
+CREATE TABLE PHP_RT_each_ticket (
+  ticket_id int(11) NOT NULL auto_increment,
+  project_id int(11) NOT NULL default '0',
+  pticket_id int(11) NOT NULL default '0',
+  eticket_id int(11) default NULL,
+  owner_id int(11) default NULL,
+  state_id int(11) NOT NULL default '0',
+  `cache` text,
+  PRIMARY KEY  (ticket_id)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=289 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_events'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_events;
+CREATE TABLE PHP_RT_events (
+  event_id int(11) NOT NULL auto_increment,
+  event_type enum('CREATE','DUPLICATE','MERGE','SPAWN','RELATE') NOT NULL default 'CREATE',
+  PRIMARY KEY  (event_id)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_item_dependancy'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_item_dependancy;
+CREATE TABLE PHP_RT_item_dependancy (
+  depend_id int(11) NOT NULL auto_increment,
+  rule_id int(11) NOT NULL default '0',
+  drule_id int(11) NOT NULL default '0',
+  `value` varchar(64) default NULL,
+  PRIMARY KEY  (depend_id),
+  KEY rule_id (rule_id),
+  KEY drule_id (drule_id)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_item_enums'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_item_enums;
+CREATE TABLE PHP_RT_item_enums (
+  rule_id int(11) NOT NULL default '0',
+  the_order int(11) NOT NULL default '0',
+  `value` varchar(128) NOT NULL default '',
+  KEY type_id (rule_id,the_order)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_item_to_project'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_item_to_project;
+CREATE TABLE PHP_RT_item_to_project (
+  rule_id int(11) NOT NULL auto_increment,
+  type_id int(5) NOT NULL default '0',
+  project_id int(11) NOT NULL default '0',
+  label varchar(64) NOT NULL default '',
+  label_limit tinyint(3) unsigned default '1',
+  default_value varchar(64) default NULL,
+  PRIMARY KEY  (rule_id,type_id,project_id)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=48 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_item_type'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_item_type;
+CREATE TABLE PHP_RT_item_type (
+  type_id int(5) NOT NULL auto_increment,
+  `type` enum('BigText','Text','Integer','Float','Date','Link','Choice','Person','Summing','Enum') default NULL,
+  PRIMARY KEY  (type_id)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_projects'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_projects;
+CREATE TABLE PHP_RT_projects (
+  project_id int(11) NOT NULL auto_increment,
+  mail_alias varchar(120) default NULL,
+  project_name varchar(40) NOT NULL default '',
+  allowanyonecreate tinyint(1) NOT NULL default '0',
+  project_abbr varchar(10) NOT NULL default '',
+  protected tinyint(1) default NULL,
+  allow_attachments tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (project_id),
+  UNIQUE KEY project_name (project_name)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_project_access'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_project_access;
+CREATE TABLE PHP_RT_project_access (
+  project_id int(11) NOT NULL default '0',
+  user_id int(11) NOT NULL default '0',
+  `level` smallint(6) unsigned NOT NULL default '60',
+  PRIMARY KEY  (project_id,user_id)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_project_dist'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_project_dist;
+CREATE TABLE PHP_RT_project_dist (
+  dist_id int(11) NOT NULL auto_increment,
+  project_id int(11) NOT NULL default '0',
+  event_id int(11) default NULL,
+  user_id int(11) default NULL,
+  rule_id int(11) default NULL,
+  stran_id int(11) default NULL,
+  role enum('ALWAYS','OWNER','NEVER') NOT NULL default 'ALWAYS',
+  PRIMARY KEY  (dist_id),
+  KEY project_id (project_id),
+  KEY event_id (event_id),
+  KEY user_id (user_id),
+  KEY rule_id (rule_id),
+  KEY stran_id (stran_id)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=75 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_project_templates'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_project_templates;
+CREATE TABLE PHP_RT_project_templates (
+  template_id int(11) NOT NULL auto_increment,
+  project_id int(11) NOT NULL default '0',
+  page enum('Create','View','History','Listing','Mail') NOT NULL default 'Create',
+  `code` text NOT NULL,
+  PRIMARY KEY  (template_id,project_id,page)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_reminders'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_reminders;
+CREATE TABLE PHP_RT_reminders (
+  project_id int(11) NOT NULL default '0',
+  rule_id int(11) NOT NULL default '0',
+  variance int(11) NOT NULL default '0',
+  PRIMARY KEY  (project_id,rule_id)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_sessions'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_sessions;
+CREATE TABLE PHP_RT_sessions (
+  id varchar(32) NOT NULL default '',
+  a_session text,
+  PRIMARY KEY  (id)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_states'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_states;
+CREATE TABLE PHP_RT_states (
+  state_id int(11) NOT NULL auto_increment,
+  project_id int(11) NOT NULL default '0',
+  `name` varchar(40) NOT NULL default '',
+  color varchar(15) default NULL,
+  initial tinyint(1) NOT NULL default '0',
+  final tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (state_id),
+  KEY initial (initial),
+  KEY final (final)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=38 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_state_rules'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_state_rules;
+CREATE TABLE PHP_RT_state_rules (
+  staterule_id int(11) NOT NULL auto_increment,
+  project_id int(11) NOT NULL default '0',
+  stran_id int(11) NOT NULL default '0',
+  rule_id int(11) NOT NULL default '0',
+  `value` text,
+  PRIMARY KEY  (staterule_id),
+  KEY project_id (project_id),
+  KEY stran_id (stran_id),
+  KEY rule_id (rule_id)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_state_transitions'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_state_transitions;
+CREATE TABLE PHP_RT_state_transitions (
+  stran_id int(11) NOT NULL auto_increment,
+  from_state_id int(11) default '0',
+  to_state_id int(11) NOT NULL default '0',
+  `level` tinyint(2) NOT NULL default '0',
+  PRIMARY KEY  (stran_id),
+  KEY from_state_id (from_state_id),
+  KEY to_state_id (to_state_id)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=45 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_ticket_dist'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_ticket_dist;
+CREATE TABLE PHP_RT_ticket_dist (
+  ticket_id int(11) NOT NULL default '0',
+  event_id int(11) NOT NULL default '0',
+  user_id int(11) NOT NULL default '0',
+  rule_id int(11) NOT NULL default '0',
+  stran_id int(11) NOT NULL default '0',
+  flag tinyint(1) unsigned default '0',
+  PRIMARY KEY  (ticket_id,event_id,user_id,rule_id,stran_id)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_ticket_items'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_ticket_items;
+CREATE TABLE PHP_RT_ticket_items (
+  ticket_id int(11) NOT NULL default '0',
+  rule_id int(11) NOT NULL default '0',
+  `value` text,
+  KEY ticket_id (ticket_id)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_ticket_relations'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_ticket_relations;
+CREATE TABLE PHP_RT_ticket_relations (
+  ticket_id int(11) NOT NULL default '0',
+  oticket_id int(11) NOT NULL default '0',
+  relation enum('Related','Parent') NOT NULL default 'Related',
+  PRIMARY KEY  (ticket_id,oticket_id)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_transactions'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_transactions;
+CREATE TABLE PHP_RT_transactions (
+  transaction_id int(11) NOT NULL auto_increment,
+  eticket_id int(11) default NULL,
+  ticket_id int(11) default NULL,
+  actor varchar(250) default NULL,
+  `type` text,
+  trans_data text,
+  trans_date int(11) default NULL,
+  PRIMARY KEY  (transaction_id)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3102 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'PHP_RT_users'
+-- 
+
+DROP TABLE IF EXISTS PHP_RT_users;
+CREATE TABLE PHP_RT_users (
+  user_id int(11) NOT NULL auto_increment,
+  username varchar(20) NOT NULL default '',
+  first_name varchar(40) NOT NULL default '',
+  last_name varchar(40) NOT NULL default '',
+  email varchar(120) default NULL,
+  phone varchar(25) default NULL,
+  `password` varchar(40) NOT NULL default '',
+  passworddate int(11) NOT NULL default '0',
+  last_login int(11) default '0',
+  last_logout int(11) default '0',
+  last_badpass int(11) default '0',
+  num_logins int(11) default '0',
+  num_logouts int(11) default '0',
+  num_badpass int(11) default '0',
+  succ_badpass int(11) default '0',
+  activated_account tinyint(1) NOT NULL default '1',
+  db_admin tinyint(1) default NULL,
+  account_create_date int(11) default NULL,
+  `view` varchar(40) default NULL,
+  c_order varchar(40) default NULL,
+  r_order varchar(40) default NULL,
+  frame_mode tinyint(1) NOT NULL default '0',
+  guest tinyint(1) default NULL,
+  reactivate varchar(32) default NULL,
+  PRIMARY KEY  (user_id),
+  UNIQUE KEY username (username)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+
+
+INSERT INTO `PHP_RT_users` (`user_id`, `username`, `first_name`, `last_name`, `email`, `phone`, `password`, `passworddate`, `last_login`, `last_logout`, `last_badpass`, `num_logins`, `num_logouts`, `num_badpass`, `succ_badpass`, `activated_account`, `db_admin`, `account_create_date`, `view`, `c_order`, `r_order`, `frame_mode`, `guest`, `reactivate`) VALUES 
+(1, 'root', 'Mr.', 'Root', 'youremail@yoursite.com', '123.123.1234', '5f4dcc3b5aa765d61d8327deb882cf99', 1121740873, 1181417758, 1181417745, 1120353550, 258, 75, 14, 0, 1, 1, 1074192762, '', '', '', 0, NULL, NULL);
+
